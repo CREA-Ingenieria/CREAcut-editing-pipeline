@@ -1,0 +1,82 @@
+# CREAcut configuration example
+# Copy to your project directory as creacut.yml and customize.
+
+whisper:
+  model: large-v3           # tiny | base | small | medium | large-v3
+  prompt: ""                 # Vocabulary hint for Whisper (e.g., "quantum physics, entropy")
+  language: es               # ISO language code
+
+scripts:
+  directory: null            # Path to scripts folder for auto-identification (null = disabled)
+  format: markdown           # markdown (with YAML frontmatter) | plain
+
+chroma:
+  enabled: true
+  color: [24, 238, 28]       # RGB of the green screen
+  inner_threshold: 40
+  outer_threshold: 100
+  despill_strength: 0.8
+
+background:
+  image: null                # Path to background image (PNG). null = no replacement.
+
+skin_correction:
+  enabled: false
+  hue_shift: -12
+  sat_scale: 0.88
+  sat_clamp: 155
+
+overlays:
+  lists:
+    enabled: true
+    llm_provider: auto       # auto | ollama | claude | regex
+    ollama_model: gemma4
+    claude_model: claude-haiku-4-5-20251001
+  terms:
+    enabled: true
+    vocab_file: null          # Path to vocab JSON: [{"term": "...", "definition": "..."}]
+  equations:
+    enabled: false
+    specs_file: null
+  bold_cards:
+    enabled: true
+
+styling:
+  font: auto                 # auto = bundled Inter, or path to .ttf/.otf
+  accent_colors:
+    - [229, 72, 155]
+    - [39, 194, 224]
+    - [220, 203, 98]
+    - [177, 74, 203]
+    - [43, 188, 199]
+
+bookends:
+  intro_video: null           # Path to intro video (.mov/.mp4). null = no intro.
+  closing_image: null         # Path to closing image (.png). null = no closing.
+  closing_duration: 5.0
+
+audio:
+  normalize: true
+  fade_duration: 0.06
+
+transitions:
+  # cut | dissolve | fade_black | wipe_left | slide_left
+  type: dissolve
+  crossfade: 0.20
+
+# Normalmente estos bloques se crean y arrastran desde el editor Electron.
+visual_effects:
+  ranges: []
+
+retakes:
+  restart_words:
+    - perdón
+    - dale
+    - otra vez
+    - se me fue
+  merge_gap: 5.0
+  split_gap: 4.0
+
+output:
+  directory: null              # null = same directory as input video
+  suffix: _edited

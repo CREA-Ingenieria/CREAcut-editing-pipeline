@@ -1,0 +1,918 @@
+@import 'tailwindcss';
+
+:root {
+  font-family: 'Inter Variable', Inter, system-ui, sans-serif;
+  color: #edf2f8;
+  background: #090b10;
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  --radius: 0.625rem;
+
+  /* Curvas y duraciones. Un unico origen para toda la interfaz: las utilidades
+     de Tailwind (`ease-out`, `duration-200`) y las animaciones propias leen de aqui, de modo que
+     una animacion nueva no puede introducir una curva inventada.
+     Valores tomados de easing.dev; las curvas nativas de CSS son demasiado
+     debiles para que el movimiento se lea como intencionado. */
+  --ease-out: cubic-bezier(.23, 1, .32, 1);
+  --ease-in-out: cubic-bezier(.77, 0, .175, 1);
+  --ease-drawer: cubic-bezier(.32, .72, 0, 1);
+  --dur-press: 130ms;
+  --dur-hover: 160ms;
+  --dur-pop: 200ms;
+  --dur-panel: 260ms;
+  --dur-scene: 420ms;
+
+  /* Capa "futurista". El editor no debe leerse como una rejilla de cajas
+     grises: la profundidad viene de superficies con luz de canto, una retícula
+     holográfica de fondo y halos sobre los elementos que estan vivos. */
+  --grid-line: rgba(0, 169, 206, .055);
+  --grid-size: 44px;
+  --aurora-a: rgba(0, 169, 206, .16);
+  --aurora-b: rgba(200, 35, 141, .13);
+  --aurora-c: rgba(65, 9, 97, .20);
+  --edge-light: rgba(255, 255, 255, .07);
+  --glow-accent: rgba(0, 169, 206, .35);
+  --glow-brand: rgba(200, 35, 141, .30);
+  --scrim: rgba(4, 6, 10, .72);
+  --skeleton: rgba(255, 255, 255, .05);
+  --skeleton-sheen: rgba(255, 255, 255, .11);
+
+  --bg: #090b10;
+  --panel: #11151d;
+  --panel-raised: #161b25;
+  --panel-soft: #1a202b;
+  --line: #29313e;
+  --line-soft: #202632;
+  --text: #edf2f8;
+  --muted: #8f9aad;
+  --muted-2: #606c7f;
+  --accent: #00A9CE;
+  --accent-strong: #C8238D;
+  --accent-soft: rgba(0, 169, 206, 0.12);
+  --accent-ink: #06120e;
+  --warning: #ffbf47;
+  --danger: #ef6c78;
+  --topbar: #0d1016;
+  --topbar-line: #29313e;
+  --info: #38bdf8;
+  --video-stage: #030405;
+  --timeline-bg: #0c1017;
+  --video-veil: rgba(73, 92, 111, .12);
+  --chip: rgba(0, 0, 0, .75);
+  --chip-line: rgba(255, 255, 255, .12);
+  --chip-text: #edf2f8;
+  --hero: radial-gradient(circle at 50% 35%, #14251f 0%, #0a0d12 42%, #07090d 100%);
+}
+
+:root[data-theme='light'] {
+  color: #17202b;
+  background: #edf1f5;
+  color-scheme: light;
+  --bg: #edf1f5;
+  --panel: #f8fafc;
+  --panel-raised: #ffffff;
+  --panel-soft: #e9eef3;
+  --line: #cfd7e1;
+  --line-soft: #dce3ea;
+  --text: #17202b;
+  --muted: #637083;
+  --muted-2: #8792a1;
+  --accent: #8B1967;
+  --accent-strong: #C8238D;
+  --accent-soft: rgba(139, 25, 103, .11);
+  --accent-ink: #ffffff;
+  --warning: #b46a00;
+  --danger: #c33f4d;
+  /* En oscuro la barra superior es la superficie más oscura de las tres
+     (barra < panel < control elevado), de modo que un botón elevado sobre
+     ella se lee sin depender solo de su borde. En claro era al revés: barra y
+     botón valían los dos #ffffff y el grupo de iconos desaparecía. Aquí se
+     mantiene la misma relación, invertida. */
+  --topbar: #e6ebf2;
+  --topbar-line: #ccd5e0;
+  --info: #0b6f9c;
+  /* Gris neutro, no blanco: el escenario ahora ocupa todo el alto libre y en
+     blanco puro se fundía con los paneles, además de falsear el brillo del
+     material que se está revisando. */
+  --video-stage: #d5dbe3;
+  --timeline-bg: #eef2f6;
+  --video-veil: rgba(99, 112, 131, .10);
+  --chip: rgba(255, 255, 255, .88);
+  --chip-line: rgba(23, 32, 43, .14);
+  --chip-text: #17202b;
+  --hero: radial-gradient(circle at 50% 35%, #ffffff 0%, #eef2f7 42%, #e3e9f0 100%);
+
+  /* En claro la retícula y los halos se atenuan: sobre fondo claro el mismo
+     valor que en oscuro se lee como suciedad, no como luz. */
+  --grid-line: rgba(139, 25, 103, .05);
+  --aurora-a: rgba(0, 169, 206, .10);
+  --aurora-b: rgba(200, 35, 141, .08);
+  --aurora-c: rgba(139, 25, 103, .07);
+  --edge-light: rgba(255, 255, 255, .9);
+  --glow-accent: rgba(139, 25, 103, .22);
+  --glow-brand: rgba(200, 35, 141, .20);
+  --scrim: rgba(237, 241, 245, .72);
+  --skeleton: rgba(23, 32, 43, .05);
+  --skeleton-sheen: rgba(23, 32, 43, .10);
+}
+
+/* Bridges the app's existing design tokens into Tailwind's utility classes
+   (bg-primary, text-foreground, border-border, …) so both themes stay
+   driven by the single :root / [data-theme='light'] source above. */
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+
+  --color-topbar: var(--topbar);
+  --color-topbar-border: var(--topbar-line);
+
+  --color-info: var(--info);
+  --color-scrim: var(--scrim);
+  --color-video-stage: var(--video-stage);
+  --color-chip: var(--chip);
+  --color-chip-border: var(--chip-line);
+  --color-chip-foreground: var(--chip-text);
+
+  --color-card: var(--panel);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--panel-raised);
+  --color-popover-foreground: var(--text);
+
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-ink);
+  --color-secondary: var(--panel-raised);
+  --color-secondary-foreground: var(--text);
+
+  --color-muted: var(--panel-soft);
+  --color-muted-foreground: var(--muted);
+  --color-accent: var(--panel-soft);
+  --color-accent-foreground: var(--text);
+
+  --color-brand: var(--accent);
+  --color-brand-strong: var(--accent-strong);
+  --color-brand-soft: var(--accent-soft);
+  --color-brand-foreground: var(--accent-ink);
+
+  --color-destructive: var(--danger);
+  --color-destructive-foreground: #ffffff;
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--accent-ink);
+
+  --color-border: var(--line);
+  --color-border-soft: var(--line-soft);
+  --color-input: var(--line);
+  --color-ring: var(--accent);
+
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 3px);
+  --radius-sm: calc(var(--radius) - 5px);
+
+  --font-sans: 'Inter Variable', Inter, system-ui, sans-serif;
+
+  /* Sobrescribe las curvas debiles que trae Tailwind por defecto, para que
+     cada `ease-out` que ya existe en la interfaz herede la buena. */
+  --ease-out: cubic-bezier(.23, 1, .32, 1);
+  --ease-in-out: cubic-bezier(.77, 0, .175, 1);
+
+  --animate-overlay-show: overlay-show 180ms linear;
+  --animate-overlay-hide: overlay-hide 140ms linear;
+  --animate-content-show: content-show var(--dur-pop) var(--ease-out);
+  --animate-content-hide: content-hide 140ms var(--ease-out);
+  --animate-pop-in: pop-in var(--dur-pop) var(--ease-out);
+  --animate-spin-slow: spin 1s linear infinite;
+  --animate-sheen: sheen 1.4s linear infinite;
+  --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
+}
+
+@keyframes overlay-show {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes overlay-hide {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+/* Solo para el dialogo, que se centra con translate(-50%, -50%): la animacion
+   tiene que conservar ese desplazamiento o el panel se descoloca. */
+@keyframes content-show {
+  from { opacity: 0; transform: translate(-50%, -47%) scale(.97); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+/* Para las superficies que Radix coloca por si mismo (Select, Tooltip y
+   cualquier otro popper). A estas NO se les puede animar `translate`: Radix
+   calcula su posicion y la escribe como transform, asi que un translate propio
+   la sobrescribe y el panel aparece desplazado media caja hacia arriba y hacia
+   la izquierda. Aqui solo se anima opacidad y escala, y el punto de origen lo
+   da el propio Radix segun el lado por el que abrio. */
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+/* Sale por donde entro: mismo eje, mismo gesto, algo mas rapido. */
+@keyframes content-hide {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to { opacity: 0; transform: translate(-50%, -48%) scale(.985); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+/* Barrido de los esqueletos de carga. */
+@keyframes sheen {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+/* Latido de los indicadores "en vivo" (backend conectado, job en curso). */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--glow-accent); }
+  50% { opacity: .72; box-shadow: 0 0 0 5px transparent; }
+}
+
+/* CREA opening wordmark: geometric identities settle into the four letters. */
+.crea-morph {
+  --crea-c: #FB0184;
+  --crea-r: #410961;
+  --crea-e: #1A0036;
+  --crea-a: #F5E600;
+  --crea-letter-c: #FCFBFC;
+  --crea-letter-r: #FCFBFC;
+  --crea-letter-e: #FCFBFC;
+  --crea-letter-a: #FCFBFC;
+  display: block;
+  overflow: visible;
+  isolation: isolate;
+  animation: crea-logo-enter 560ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+:root[data-theme='light'] .crea-morph {
+  --crea-c: #C8238D;
+  --crea-r: #8B1967;
+  --crea-e: #00A9CE;
+  --crea-a: #F5E600;
+  --crea-letter-c: #C8238D;
+  --crea-letter-r: #8B1967;
+  --crea-letter-e: #00A9CE;
+  --crea-letter-a: #F5E600;
+}
+
+.crea-morph__halo {
+  fill: #FB0184;
+  opacity: .055;
+  filter: blur(26px);
+}
+
+:root[data-theme='light'] .crea-morph__halo {
+  fill: #00A9CE;
+  opacity: .07;
+}
+
+.crea-morph__symbol--c { --shape-color: var(--crea-c); --letter-color: var(--crea-letter-c); }
+.crea-morph__symbol--r { --shape-color: var(--crea-r); --letter-color: var(--crea-letter-r); }
+.crea-morph__symbol--e { --shape-color: var(--crea-e); --letter-color: var(--crea-letter-e); }
+.crea-morph__symbol--a { --shape-color: var(--crea-a); --letter-color: var(--crea-letter-a); }
+
+.crea-morph__shape,
+.crea-morph__letter {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.crea-morph__shape {
+  color: var(--shape-color);
+  filter: drop-shadow(0 10px 18px rgba(251, 1, 132, .18));
+}
+
+.crea-morph:not(.crea-morph--interactive) .crea-morph__symbol {
+  pointer-events: none;
+}
+
+.crea-morph:not(.crea-morph--interactive) .crea-morph__shape {
+  animation: crea-shape-morph 1.45s cubic-bezier(.65, 0, .2, 1)
+    calc(180ms + var(--symbol-delay)) both;
+}
+
+.crea-morph__shape--solid {
+  fill: currentColor;
+  stroke: rgba(252, 251, 252, .2);
+  stroke-width: 2;
+}
+
+.crea-morph__symbol--e .crea-morph__shape {
+  stroke: #FCFBFC;
+  stroke-opacity: .48;
+}
+
+:root[data-theme='light'] .crea-morph__shape--solid {
+  stroke: rgba(23, 32, 43, .10);
+}
+
+.crea-morph__letter {
+  fill: var(--letter-color);
+  font-family: 'Inter Variable', Inter, system-ui, sans-serif;
+  font-size: 154px;
+  font-weight: 820;
+  letter-spacing: -.07em;
+  opacity: 0;
+  filter: drop-shadow(0 10px 22px rgba(26, 0, 54, .28));
+}
+
+.crea-morph:not(.crea-morph--interactive) .crea-morph__letter {
+  animation: crea-letter-settle 1.05s cubic-bezier(.16, 1, .3, 1)
+    calc(750ms + var(--symbol-delay)) both;
+}
+
+/* Blanco de hover estable por letra. Sin el, barrer la palabra deprisa casi
+   nunca conmuta: la C es solo un trazo de 18px y entre figuras quedan huecos. */
+.crea-morph__hit {
+  fill: transparent;
+  pointer-events: none;
+}
+
+.crea-morph--interactive .crea-morph__hit {
+  pointer-events: all;
+}
+
+.crea-morph--interactive .crea-morph__symbol {
+  cursor: pointer;
+  outline: none;
+}
+
+.crea-morph--interactive .crea-morph__shape {
+  opacity: 0;
+  transform: rotate(-7deg) scale(.76);
+  transition:
+    opacity 220ms linear,
+    transform 440ms cubic-bezier(.16, 1, .3, 1);
+  will-change: opacity, transform;
+}
+
+.crea-morph--interactive .crea-morph__letter {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 190ms linear,
+    transform 400ms cubic-bezier(.16, 1, .3, 1);
+  will-change: opacity, transform;
+}
+
+.crea-morph--interactive .crea-morph__symbol[data-flipped='true'] .crea-morph__shape {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.crea-morph--interactive .crea-morph__symbol[data-flipped='true'] .crea-morph__letter {
+  opacity: 0;
+  transform: translateY(5px) scale(.74);
+}
+
+.crea-morph--interactive .crea-morph__symbol:focus-visible {
+  filter: drop-shadow(0 0 8px var(--shape-color));
+}
+
+:root[data-theme='light'] .crea-morph__symbol--a .crea-morph__letter {
+  stroke: rgba(139, 25, 103, .32);
+  stroke-width: 1.5;
+  paint-order: stroke fill;
+}
+
+@keyframes crea-logo-enter {
+  from { opacity: 0; transform: translateY(8px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes crea-shape-morph {
+  0%, 24% { opacity: 1; transform: rotate(0deg) scale(1); }
+  58% { opacity: .72; transform: rotate(8deg) scale(.78); }
+  100% { opacity: 0; transform: rotate(0deg) scale(1.06); }
+}
+
+@keyframes crea-letter-settle {
+  0%, 18% { opacity: 0; transform: translateY(8px) scale(.72); }
+  62% { opacity: 1; transform: translateY(-2px) scale(1.035); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Surfaces whose paint is a gradient, so they cannot be expressed as a
+   single Tailwind color utility. Both read their value from the theme. */
+.hero-surface { background: var(--hero); }
+.video-veil { background: radial-gradient(circle at 50% 42%, var(--video-veil), transparent 56%); }
+
+/* El desplazamiento suave y el apilado de proyectos usan el scroll del
+   documento, así que este tiene que poder desplazarse. La clase
+   `welcome-smooth`, que `useSmoothScroller` pone y quita en `<html>`, libera
+   esa regla únicamente mientras la bienvenida está montada. La galería actual
+   usa tarjetas apiladas y mantiene sus estilos en `project-portfolio.css`. */
+
+html.welcome-smooth,
+html.welcome-smooth body,
+html.welcome-smooth #root {
+  height: auto;
+  overflow: visible;
+}
+
+html.welcome-smooth body { background: var(--hero); }
+
+/* Indicación de desplazamiento del héroe. La regla global de
+   `prefers-reduced-motion` del final de este archivo ya la neutraliza. */
+.scroll-hint-arrow { animation: scroll-hint 1.8s ease-in-out infinite; }
+
+@keyframes scroll-hint {
+  0%, 100% { transform: translateY(0); opacity: .55; }
+  50% { transform: translateY(4px); opacity: 1; }
+}
+
+html, body, #root { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted-2); }
+
+/* Timeline canvas: bespoke pixel-precise surface, kept outside the
+   component system since it is rendered imperatively via <canvas>. */
+/* La altura la escribe `Timeline.tsx` desde `timelineTracks()`, que es la
+   misma fuente que usan el lienzo y la columna de nombres. Antes vivía aquí
+   como un número fijo y cada pista nueva la dejaba desincronizada: la fila de
+   diapositivas se dibujaba pero quedaba recortada por `overflow-y: hidden`. */
+.timeline-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--timeline-bg);
+}
+
+/* El área de pistas se pinta con el fondo del lienzo, no con el de la tarjeta:
+   si el usuario agranda el panel más allá de la última pista, el hueco se lee
+   como lienzo vacío y no como un espacio muerto dentro de una tarjeta. */
+.timeline-body { background: var(--timeline-bg); }
+.timeline-canvas { display: block; cursor: crosshair; }
+
+/* Barra horizontal más discreta: es un elemento permanente de la pista más
+   densa del editor y no debe competir con los bloques. */
+.timeline-scroll::-webkit-scrollbar { height: 9px; }
+.timeline-scroll::-webkit-scrollbar-thumb { background: var(--line); }
+.timeline-scroll::-webkit-scrollbar-thumb:hover { background: var(--muted-2); }
+
+
+/* ===========================================================================
+   Capa "HUD": lo que separa a CREAcut de un editor de video estandar.
+   ---------------------------------------------------------------------------
+   Un editor convencional se dibuja como una cuadricula de cajas grises. Aqui la
+   profundidad la dan tres recursos, y solo esos tres, para que el conjunto se
+   lea como un instrumento y no como una coleccion de efectos:
+
+     1. luz de canto en cada superficie (`.panel-edge`);
+     2. una reticula holografica de fondo, fija y sin coste por fotograma;
+     3. marcas de esquina y halos SOLO sobre lo que esta vivo.
+
+   Regla que se respeta en todo el archivo: nada que el usuario tenga que leer
+   o manipular (video, formas de onda, transcripcion) se mueve por estetica.
+   =========================================================================== */
+
+/* Reticula de fondo. Es un degradado repetido, no una imagen ni una animacion:
+   coste de pintado unico y cero trabajo por fotograma. */
+.fx-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  /* Se desvanece hacia los bordes para que no compita con el contenido. */
+  mask-image: radial-gradient(ellipse 78% 68% at 50% 42%, #000 30%, transparent 100%);
+}
+
+/* Auroras del heroe. Dos manchas desenfocadas que derivan muy despacio.
+   Viven solo en la bienvenida: detras del editor competirian con el video y
+   costarian GPU durante toda la sesion, que es justo cuando hace falta.
+   `translate3d` mantiene la animacion en el compositor. */
+.fx-aurora {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  will-change: transform;
+}
+.fx-aurora--a {
+  width: 46vw; height: 46vw; top: -12vh; left: -8vw;
+  background: var(--aurora-a);
+  animation: aurora-drift-a 26s ease-in-out infinite alternate;
+}
+.fx-aurora--b {
+  width: 40vw; height: 40vw; right: -6vw; top: 18vh;
+  background: var(--aurora-b);
+  animation: aurora-drift-b 31s ease-in-out infinite alternate;
+}
+.fx-aurora--c {
+  width: 52vw; height: 34vw; bottom: -14vh; left: 22vw;
+  background: var(--aurora-c);
+  animation: aurora-drift-a 37s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes aurora-drift-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(6vw, 4vh, 0) scale(1.12); }
+}
+@keyframes aurora-drift-b {
+  from { transform: translate3d(0, 0, 0) scale(1.08); }
+  to { transform: translate3d(-5vw, 6vh, 0) scale(1); }
+}
+
+/* Marcas de esquina. Enmarcan la superficie activa (el escenario de video)
+   como un visor, no como una tarjeta. Puramente decorativas y estaticas. */
+.hud-frame::before,
+.hud-frame::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--accent);
+  opacity: .28;
+  pointer-events: none;
+  transition: opacity var(--dur-panel) var(--ease-out);
+}
+.hud-frame::before { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+.hud-frame::after { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+/* Durante la reproduccion las marcas se apagan: el video manda. */
+.hud-frame[data-playing='true']::before,
+.hud-frame[data-playing='true']::after { opacity: .07; }
+
+/* Punto "en vivo": backend conectado, trabajo en curso, modo de reproduccion. */
+.live-dot {
+  position: relative;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  animation: var(--animate-pulse-dot);
+}
+.live-dot--brand { background: var(--accent-strong); }
+
+/* ---------------------------------------------------------------------------
+   Transicion de escena: bienvenida <-> editor.
+   ---------------------------------------------------------------------------
+   Es la unica animacion larga de la aplicacion (~420ms) y esta justificada:
+   ocurre una o dos veces por sesion y sustituye un salto brusco entre dos
+   pantallas que no comparten nada. Se resuelve con animaciones CSS a
+   proposito: montar el editor es caro (video, canvas, medios), y las
+   animaciones CSS siguen corriendo fuera del hilo principal mientras eso pasa;
+   una animacion por `requestAnimationFrame` perderia fotogramas justo ahi.
+   --------------------------------------------------------------------------- */
+
+/* La bienvenida se aleja: cae hacia atras y se desenfoca, como si el editor la
+   dejara fuera de foco. Sin desplazamiento lateral: nada indica una direccion. */
+.scene-leave {
+  animation: scene-leave 260ms var(--ease-out) both;
+  pointer-events: none;
+}
+
+@keyframes scene-leave {
+  from { opacity: 1; transform: scale(1); filter: blur(0); }
+  to { opacity: 0; transform: scale(.985); filter: blur(7px); }
+}
+
+/* Los paneles del editor llegan cada uno desde su borde: eso explica de donde
+   viene cada region de la pantalla. El escalonado (60ms) evita que todo
+   aparezca de golpe, que es lo que hace que una interfaz se sienta plana. */
+.scene-enter { animation-fill-mode: backwards; animation-timing-function: var(--ease-out); }
+.scene-enter--top { animation-name: enter-top; animation-duration: var(--dur-panel); }
+.scene-enter--left { animation-name: enter-left; animation-duration: var(--dur-scene); animation-delay: 60ms; }
+.scene-enter--right { animation-name: enter-right; animation-duration: var(--dur-scene); animation-delay: 60ms; }
+.scene-enter--stage { animation-name: enter-stage; animation-duration: var(--dur-scene); animation-delay: 100ms; }
+.scene-enter--bottom { animation-name: enter-bottom; animation-duration: var(--dur-scene); animation-delay: 160ms; }
+
+@keyframes enter-top {
+  from { opacity: 0; transform: translateY(-100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes enter-left {
+  from { opacity: 0; transform: translateX(-14px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes enter-right {
+  from { opacity: 0; transform: translateX(14px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes enter-bottom {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* El escenario no se desplaza: crece un 1.5%. Desplazarlo sugeriria que el
+   video viene de algun sitio, y no es asi. */
+@keyframes enter-stage {
+  from { opacity: 0; transform: scale(.985); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+
+/* Entrada escalonada del heroe. `--i` es el orden del elemento; 70ms entre
+   piezas es suficiente para que la pantalla se lea de arriba abajo sin que la
+   espera llegue a notarse. Retardo inicial de 120ms para no pisar la animacion
+   del logotipo, que ya esta corriendo. */
+.hero-in {
+  animation: enter-bottom var(--dur-scene) var(--ease-out) backwards;
+  animation-delay: calc(120ms + var(--i, 0) * 70ms);
+}
+
+/* ---------------------------------------------------------------------------
+   Estados de carga
+   --------------------------------------------------------------------------- */
+
+/* Esqueleto con barrido. El barrido es un hijo con `transform`, no un
+   `background-position` animado: lo segundo repinta el elemento entero en cada
+   fotograma. */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--skeleton);
+  border-radius: var(--radius-sm);
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--skeleton-sheen), transparent);
+  animation: var(--animate-sheen);
+}
+
+/* ---------------------------------------------------------------------------
+   Scrubber del reproductor
+   ---------------------------------------------------------------------------
+   El `<input type=range>` nativo con `accent-color` mete un control del sistema
+   operativo en medio de un HUD. Este conserva el elemento nativo (teclado,
+   lector de pantalla, arrastre) y solo repinta la pista y el pulgar.
+   El relleno de progreso llega por `--scrub-progress`, que fija el componente.
+   --------------------------------------------------------------------------- */
+.scrub {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 18px;
+  background: transparent;
+  cursor: pointer;
+}
+.scrub::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background:
+    linear-gradient(to right, var(--accent) 0 var(--scrub-progress, 0%), transparent var(--scrub-progress, 0%)),
+    var(--line);
+}
+.scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--glow-accent);
+  /* Solo el pulgar se anima, y solo al pulsar: 130ms es el umbral por debajo
+     del cual un control se siente conectado al dedo. */
+  transition: transform var(--dur-press) var(--ease-out), box-shadow var(--dur-press) var(--ease-out);
+}
+.scrub:hover::-webkit-slider-thumb { transform: scale(1.15); }
+.scrub:active::-webkit-slider-thumb {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 5px var(--glow-accent);
+}
+.scrub:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--accent); }
+.scrub:disabled { cursor: default; opacity: .45; }
+.scrub:disabled::-webkit-slider-thumb { transform: none; }
+
+/* ---------------------------------------------------------------------------
+   Indicador deslizante de pestanas
+   ---------------------------------------------------------------------------
+   Una barra unica que viaja entre pestanas, en lugar de un borde que se
+   enciende y se apaga en cada una. La posicion y el ancho los mide
+   `useTabIndicator` y los escribe en estas dos variables.
+   Se anima `transform`, no `left`/`width`: asi no hay reflow por fotograma.
+   --------------------------------------------------------------------------- */
+/* El ancho es `width` y no `scaleX`, aunque escalar sea mas barato: `scaleX`
+   tambien escala el `box-shadow`, y con un ancho base de 1px estirado unas 120
+   veces el resplandor de 10px se convertia en una banda de ~1200px que cruzaba
+   el panel entero. La posicion si sigue siendo `transform`, que es lo que se
+   anima en cada fotograma; el ancho solo cambia al saltar de pestaña y la barra
+   esta fuera de flujo (`position: absolute`), asi que no arrastra reflow de sus
+   hermanos. */
+.tab-indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  width: var(--tab-w, 0px);
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--glow-accent);
+  transform: translateX(var(--tab-x, 0px));
+  transition:
+    transform var(--dur-pop) var(--ease-out),
+    width var(--dur-pop) var(--ease-out),
+    opacity 120ms linear;
+  will-change: transform, width;
+  pointer-events: none;
+}
+/* Antes de la primera medida no debe verse una barra de 1px en el origen. */
+.tab-indicator[data-ready='false'] { opacity: 0; }
+
+/* Version en pastilla, para el conmutador de modos del reproductor. */
+.tab-indicator--pill {
+  top: 2px;
+  bottom: 2px;
+  height: auto;
+  border-radius: 5px;
+  background: var(--panel-soft);
+  box-shadow: inset 0 1px 0 var(--edge-light);
+}
+
+
+/* ===========================================================================
+   Armazón del editor
+   ---------------------------------------------------------------------------
+   Piezas compartidas por los paneles: la etiqueta de cabecera, el separador
+   arrastrable y las capas que van sobre el escenario del visor. Viven aquí y
+   no como utilidades sueltas porque cada una tiene estados (hover, arrastre,
+   selección) que se repiten en varios componentes.
+   =========================================================================== */
+
+/* Etiqueta de cabecera de panel y de pista. Un solo tamaño en toda la
+   aplicación: antes convivían 9px, 10px y 11px en versales sin criterio. */
+.panel-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------------------
+   Separador arrastrable
+   ---------------------------------------------------------------------------
+   La línea mide 1px y la zona sensible 9px. Solo se anima el color: el arrastre
+   es un gesto de precisión y el panel tiene que ir pegado al puntero.
+   --------------------------------------------------------------------------- */
+.panel-divider {
+  transition: background-color var(--dur-hover) ease;
+  touch-action: none;
+}
+.panel-divider__hit {
+  /* Por debajo del contenido de los paneles: no debe interceptar ni recortar
+     nada de lo que el visor superponga cerca del borde. */
+  z-index: 0;
+}
+.panel-divider:hover,
+.panel-divider:focus-visible,
+.panel-divider[data-dragging='true'] {
+  background-color: var(--accent);
+}
+.panel-divider:focus-visible { outline: none; box-shadow: 0 0 0 1px var(--accent); }
+/* Mientras se arrastra, el cursor de redimensionado manda en toda la ventana:
+   sin esto parpadea al pasar por encima del vídeo o del lienzo. */
+body:has(.panel-divider[data-dragging='true'][aria-orientation='vertical']) { cursor: col-resize; }
+body:has(.panel-divider[data-dragging='true'][aria-orientation='horizontal']) { cursor: row-resize; }
+body:has(.panel-divider[data-dragging='true']) * { user-select: none; }
+
+/* ---------------------------------------------------------------------------
+   Capas del escenario
+   --------------------------------------------------------------------------- */
+
+/* Etiquetas sobre el vídeo (modo, efecto activo, ayuda del presentador). */
+.stage-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 7px;
+  border: 1px solid var(--chip-line);
+  border-radius: var(--radius-sm);
+  background: var(--chip);
+  color: var(--chip-text);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Recorte del presentador sobre la diapositiva. El contorno solo aparece al
+   pasar el ratón o durante el arrastre: fijo, competiría con la diapositiva. */
+.presenter-layer__frame {
+  border: 1px solid transparent;
+  transition: border-color var(--dur-hover) ease, box-shadow var(--dur-hover) ease;
+}
+.presenter-layer:hover .presenter-layer__frame,
+.presenter-layer[data-active='true'] .presenter-layer__frame {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.presenter-layer__handle {
+  opacity: 0;
+  transition: opacity var(--dur-hover) ease;
+}
+.presenter-layer:hover .presenter-layer__handle,
+.presenter-layer[data-active='true'] .presenter-layer__handle { opacity: 1; }
+
+/* Miniatura de diapositiva en la biblioteca. */
+.slide-tile {
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--dur-hover) ease, box-shadow var(--dur-hover) ease;
+}
+.slide-tile:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+.slide-tile[aria-pressed='true'] { box-shadow: 0 0 0 1px var(--accent); }
+.slide-tile:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+
+/* ---------------------------------------------------------------------------
+   Trabajo en curso
+   ---------------------------------------------------------------------------
+   Barra indeterminada de 2px pegada al borde inferior de la barra superior.
+   Es `transform` sobre un hijo y no `width` ni `background-position`: así la
+   animación vive en el compositor y no repinta nada mientras el usuario
+   espera, que es cuando el hilo principal ya está ocupado.
+   --------------------------------------------------------------------------- */
+.busy-bar {
+  position: absolute;
+  inset-inline: 0;
+  top: -1px;
+  height: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.busy-bar::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 34%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  animation: busy-sweep 1.15s var(--ease-in-out) infinite;
+}
+
+@keyframes busy-sweep {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(400%); }
+}
+
+/* ---------------------------------------------------------------------------
+   Aviso flotante
+   ---------------------------------------------------------------------------
+   Entra y sale por abajo. La salida es más corta que la entrada: al entrar el
+   usuario tiene que darse cuenta, al salir ya ha decidido.
+   --------------------------------------------------------------------------- */
+.toast {
+  animation: toast-in var(--dur-pop) var(--ease-out) both;
+}
+.toast[data-leaving='true'] {
+  animation: toast-out 160ms var(--ease-out) both;
+}
+
+/* Entra y sale por arriba, que es el borde por el que está anclado. */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-8px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(-5px) scale(.99); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Se conservan los cambios de color y opacidad, acortados: siguen explicando
+     el estado sin desplazar nada. La regla anterior apagaba todo con `*`, que
+     tambien elimina los fundidos que ayudan a entender un cambio. */
+  *, *::before, *::after {
+    transition-duration: 120ms !important;
+    animation-duration: 120ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  /* Bucles decorativos: fuera por completo. */
+  .fx-aurora, .live-dot, .skeleton::after, .scroll-hint-arrow { animation: none !important; }
+  .busy-bar::after { animation: none !important; width: 100%; opacity: .6; }
+  .fx-aurora { opacity: .5; }
+
+  /* Movimiento entre escenas: se sustituye por un fundido, que sigue marcando
+     que la pantalla ha cambiado sin desplazar los paneles. */
+  .scene-leave, .scene-enter { animation-name: fade-in !important; animation-delay: 0ms !important; }
+  .scene-leave { animation-direction: reverse !important; }
+  .tab-indicator { transition: opacity 120ms linear !important; }
+
+  .toast { animation-name: fade-in !important; }
+  .toast[data-leaving='true'] { animation: fade-in 120ms linear reverse both !important; }
+
+  .crea-morph { animation: none !important; }
+  .crea-morph__shape { opacity: 0; animation: none !important; }
+  .crea-morph__letter { opacity: 1; transform: none; animation: none !important; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

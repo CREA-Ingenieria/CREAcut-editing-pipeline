@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+pytest-cache-files-*/
+*.egg-info/
+dist/
+build/
+.venv/
+.local-temp/
+*.whisper.json
+*.lists.json
+.term_usage.json
+.DS_Store
+.claude/
+.superpowers/
+demo_editor/
+.creacut-cache/
+
+# PyInstaller genera este spec al correr scripts/build_windows_exe.ps1
+/CREAcut.spec
+
+# Archivos locales de herramientas de desarrollo
+CLAUDE.md
+CLAUDE.local.md
+.mcp.json
+.superpowers/
+docs/superpowers/

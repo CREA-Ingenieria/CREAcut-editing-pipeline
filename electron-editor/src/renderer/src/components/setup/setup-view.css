@@ -1,0 +1,106 @@
+/* Pantalla de preparacion del primer arranque en macOS.
+   Solo usa variables de styles.css: ni colores, ni curvas, ni duraciones
+   propias. La superficie (auroras, reticula, cabecera de marca) es la misma de
+   la bienvenida. */
+/* html, body y #root no se desplazan: la pantalla ocupa su alto y se desplaza
+   sola si el contenido no cabe (p. ej. con «Ver detalle» abierto). El margen
+   automatico del panel lo centra cuando cabe y se anula cuando no, asi no
+   se corta por arriba. */
+.setup-view {
+  position: relative;
+  display: grid;
+  height: 100%;
+  overflow-y: auto;
+  justify-items: center;
+  padding: 48px 24px;
+  color: var(--text);
+}
+
+.setup-view__panel {
+  margin: auto 0;
+  width: min(620px, 100%);
+  padding: 28px 30px 30px;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) + 4px);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  box-shadow: inset 0 1px 0 var(--edge-light);
+  backdrop-filter: blur(14px);
+}
+.setup-view__panel .creator-hero__masthead { margin-bottom: 22px; padding-right: 0; }
+
+.setup-view__title {
+  margin: 0;
+  font-size: clamp(26px, 4vw, 34px);
+  font-weight: 850;
+  line-height: 1.1;
+  letter-spacing: -.04em;
+}
+.setup-view__lead { margin: 10px 0 22px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+.setup-steps { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.setup-step {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  transition: background-color var(--dur-hover) var(--ease-out);
+}
+.setup-step[data-state='running'] { background: var(--accent-soft); }
+.setup-step__icon { justify-self: center; }
+.setup-step__icon--done { color: var(--accent); }
+.setup-step__icon--failed { color: var(--danger); }
+.setup-step__pending { justify-self: center; width: 6px; height: 6px; border-radius: 999px; background: var(--muted-2); }
+.setup-step__body { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+.setup-step__label { font-size: 13px; font-weight: 600; }
+.setup-step[data-state='pending'] .setup-step__label { color: var(--muted-2); }
+.setup-step__message {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.setup-step__percent { color: var(--accent); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+.setup-view__progress { display: grid; gap: 12px; margin-top: 18px; }
+.setup-progress {
+  position: relative;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.setup-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--glow-accent);
+  transition: width var(--dur-panel) var(--ease-out);
+}
+/* La barra indeterminada de la app, a la altura de esta pista. */
+.setup-progress .busy-bar { top: 0; height: 100%; background: transparent; }
+.setup-view__hint { margin: 0; color: var(--muted); font-size: 11px; }
+
+.setup-view__error { display: grid; gap: 12px; margin-top: 18px; }
+.setup-view__error > p { display: flex; gap: 8px; margin: 0; color: var(--danger); font-size: 12px; line-height: 1.5; }
+.setup-view__detail {
+  max-height: 180px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--panel-soft);
+}
+.setup-view__detail pre {
+  margin: 0;
+  padding: 10px 12px;
+  color: var(--muted);
+  font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: pre-wrap;
+}
+.setup-view__log { margin: 0; color: var(--muted-2); font-size: 11px; word-break: break-all; }
+
+@media (prefers-reduced-motion: reduce) {
+  .setup-progress > span, .setup-step { transition: none; }
+}

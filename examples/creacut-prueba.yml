@@ -1,0 +1,3 @@
+whisper:
+  model: base
+  language: es

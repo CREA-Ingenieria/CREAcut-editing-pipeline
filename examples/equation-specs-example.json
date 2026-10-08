@@ -1,0 +1,11 @@
+[
+  {
+    "id": "newtons-second-law",
+    "title": "Newton's Second Law",
+    "paragraph_keyword": "force equals mass",
+    "steps": [
+      {"latex": "F = m \\cdot a", "keyword": "force"},
+      {"latex": "a = \\frac{F}{m}", "keyword": "acceleration"}
+    ]
+  }
+]

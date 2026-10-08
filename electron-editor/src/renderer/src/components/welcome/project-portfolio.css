@@ -1,0 +1,122 @@
+.project-portfolio {
+  --portfolio-bg: #0c0e12;
+  --portfolio-text: #d7e2ea;
+  --portfolio-muted: #8997a8;
+  position: relative;
+  isolation: isolate;
+  padding: clamp(56px, 8vw, 110px) clamp(20px, 4vw, 64px) 32px;
+  border-radius: 60px 60px 0 0;
+  background: var(--portfolio-bg);
+  color: var(--portfolio-text);
+}
+.project-portfolio__heading { max-width: 1280px; margin: 0 auto 64px; }
+.project-portfolio__eyebrow { display: flex; justify-content: space-between; gap: 16px; font-size: 9px; font-weight: 650; letter-spacing: .15em; color: var(--portfolio-muted); }
+.project-portfolio__heading h2 { margin: 28px 0 18px; font-size: clamp(48px, 11.5vw, 160px); line-height: .95; font-weight: 900; text-transform: uppercase; letter-spacing: -.075em; background: linear-gradient(180deg, #6d798a, #d7e2ea); background-clip: text; -webkit-text-fill-color: transparent; }
+.project-portfolio__heading h2 span { -webkit-text-fill-color: #f5e600; }
+.project-portfolio__heading p { margin: 0; color: var(--portfolio-muted); font-size: 13px; }
+.project-portfolio__stack { max-width: 1280px; margin: auto; }
+.project-portfolio__slot { position: relative; margin-bottom: 12vh; pointer-events: none; }
+/* La ranura apilada se alarga más allá de la tarjeta visible. Esa zona
+   transparente no debe tapar el botón de otra tarjeta. */
+.portfolio-project { pointer-events: auto; }
+.project-portfolio__slot:last-child { margin-bottom: 0; }
+.portfolio-project {
+  --art-accent: #c8238d;
+  --art-soft: #ec9bcf;
+  position: relative;
+  padding: clamp(18px, 2.2vw, 32px);
+  border: 2px solid #d7e2ea;
+  border-radius: clamp(30px, 4vw, 60px);
+  background: var(--portfolio-bg);
+  box-shadow: 0 -16px 50px #0003;
+  transform-origin: center top;
+}
+.portfolio-project[data-accent='1'] { --art-accent: #7647a9; --art-soft: #d9c4f1; }
+.portfolio-project[data-accent='2'] { --art-accent: #00a9ce; --art-soft: #bcf1fa; }
+.portfolio-project[data-accent='3'] { --art-accent: #dbd223; --art-soft: #f9f4b5; }
+.portfolio-project__header { display: flex; align-items: center; gap: clamp(16px, 2.5vw, 36px); padding: 0 8px 24px; }
+.portfolio-project__number { font-size: clamp(56px, 8vw, 116px); font-weight: 850; letter-spacing: -.08em; line-height: 1; flex-shrink: 0; }
+.portfolio-project__title { min-width: 0; flex: 1; }
+.portfolio-project__category { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 9px; letter-spacing: .1em; color: var(--portfolio-muted); text-transform: uppercase; }
+.portfolio-project__category i { width: 4px; height: 4px; background: var(--art-accent); border-radius: 50%; }
+.portfolio-project__title h3 { margin: 10px 0 0; font-size: clamp(18px, 2.6vw, 36px); font-weight: 550; letter-spacing: -.04em; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.portfolio-project__open { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; gap: 12px; border: 2px solid var(--portfolio-text); border-radius: 999px; padding: 15px 23px; background: transparent; color: var(--portfolio-text); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: color 160ms ease-out, background-color 160ms ease-out; }
+.portfolio-project__open:hover { color: var(--portfolio-bg); background: var(--portfolio-text); }
+.portfolio-project__open:focus-visible { outline: 3px solid var(--art-accent); outline-offset: 5px; }
+.portfolio-project__open:disabled { cursor: wait; opacity: .65; }
+.portfolio-project__open > svg { pointer-events: none; }
+.portfolio-project__error { margin: 0 8px 20px; padding: 12px 16px; border: 1px solid var(--danger); border-radius: 12px; color: var(--danger); font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 180px; overflow-y: auto; }
+.portfolio-project__collage { display: grid; grid-template-columns: 2fr 3fr; gap: 16px; height: clamp(260px, 43vh, 480px); }
+.portfolio-project__details { display: grid; grid-template-rows: 1fr 1.2fr; min-width: 0; min-height: 0; gap: 16px; }
+.portfolio-art { margin: 0; min-width: 0; min-height: 0; position: relative; isolation: isolate; overflow: hidden; border-radius: clamp(20px, 3vw, 42px); background: #1a202b; }
+.portfolio-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.portfolio-art figcaption { position: absolute; left: 16px; bottom: 14px; max-width: calc(100% - 32px); background: #0c0e12bd; color: #e9eff5; padding: 6px 10px; border-radius: 999px; font-size: 8px; letter-spacing: .08em; backdrop-filter: blur(8px); }
+.portfolio-art__graphic { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 64% 28%, var(--art-accent), #211827 75%); }
+.portfolio-art__orb { position: absolute; width: 52%; aspect-ratio: 1; left: 30%; top: 12%; border-radius: 50%; background: radial-gradient(circle at 30% 24%, #fff, var(--art-soft) 15%, var(--art-accent) 40%, #0c0e12 85%); box-shadow: 8px 18px 28px #0005; }
+.portfolio-art__ring { position: absolute; width: 92%; height: 54%; left: 7%; top: 22%; border: 1px solid #ffffff70; border-radius: 50%; transform: rotate(-30deg); }
+.portfolio-art__type { position: absolute; left: 9%; top: 9%; color: #f1f5fa; font-size: clamp(44px, 9vw, 122px); line-height: 1; letter-spacing: -.075em; font-weight: 850; }
+.portfolio-art__cross { position: absolute; right: 8%; bottom: 9%; color: #fff9; font: 32px monospace; }
+.portfolio-art--identity .portfolio-art__graphic { background: var(--art-soft); }
+.portfolio-art--identity .portfolio-art__type { color: #1c2030; font-size: clamp(60px, 11vw, 150px); top: 4%; }
+.portfolio-art--identity .portfolio-art__orb { left: 59%; top: -40%; width: 62%; }
+.portfolio-art--identity .portfolio-art__ring { left: 45%; top: 30%; border-color: #1c203040; }
+.portfolio-art--cover .portfolio-art__graphic { background: linear-gradient(155deg, #12151e 10%, #293448 65%, var(--art-accent)); }
+.portfolio-art--cover .portfolio-art__type { top: 14%; z-index: 2; font-size: clamp(50px, 9vw, 134px); }
+.portfolio-art--cover .portfolio-art__orb { left: 36%; top: 24%; width: 58%; }
+.portfolio-art--cover .portfolio-art__ring { top: 44%; left: -9%; width: 125%; }
+.portfolio-art__name { position: absolute; left: 10%; right: 12%; bottom: 17%; font-size: clamp(15px, 2vw, 26px); line-height: 1.15; letter-spacing: -.03em; color: #fff; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.portfolio-project__footer { display: flex; align-items: center; gap: 8px; padding: 18px 10px 0; color: var(--portfolio-muted); font-size: 9px; }
+.portfolio-project__footer > span:first-of-type { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.portfolio-project__footer > span:last-child { margin-left: auto; letter-spacing: .14em; white-space: nowrap; }
+.project-portfolio__footer { display: flex; justify-content: space-between; max-width: 1280px; margin: 64px auto 0; padding-top: 20px; border-top: 1px solid #8997a840; font-size: 10px; color: var(--portfolio-muted); }
+/* Apilado de tarjetas. `useProjectStack` mide la galería, escribe las
+   variables y pone `is-stacked` solo en ventanas grandes y sin reducción de
+   movimiento. Cada ranura, menos la última, se alarga hasta donde debe soltarse
+   su tarjeta y devuelve ese alto con un margen negativo: la página no cambia de
+   largo. Dentro de esa pista la tarjeta es `sticky`, así que el navegador la
+   fija sin trabajo por fotograma, y la escala sigue al scroll del documento.
+   Van propiedades largas: el atajo `animation` reiniciaría `animation-timeline`. */
+.project-portfolio__stack.is-stacked > .project-portfolio__slot:not(:last-child) {
+  height: var(--stack-track-height);
+  margin-bottom: var(--stack-track-margin);
+}
+.project-portfolio__stack.is-stacked > .project-portfolio__slot:not(:last-child) > .portfolio-project {
+  position: sticky;
+  top: var(--stack-top);
+  animation-name: portfolio-stack-shrink;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-timeline: scroll(root);
+  animation-range: var(--stack-start) var(--stack-end);
+}
+@keyframes portfolio-stack-shrink {
+  from { transform: scale(1); }
+  to { transform: scale(var(--stack-scale)); }
+}
+:root[data-theme='light'] .project-portfolio { --portfolio-bg: #edf1f5; --portfolio-text: #243145; --portfolio-muted: #596a7f; }
+:root[data-theme='light'] .project-portfolio__heading h2 { background-image: linear-gradient(180deg, #263344, #7a8ba1); }
+:root[data-theme='light'] .project-portfolio__heading h2 span { -webkit-text-fill-color: #8b1967; }
+:root[data-theme='light'] .portfolio-project { border-color: #8997a8; box-shadow: 0 -10px 40px #20304d12; }
+@media (max-width: 849px) {
+  .project-portfolio { border-radius: 36px 36px 0 0; }
+  .project-portfolio__heading { margin-bottom: 36px; }
+  .project-portfolio__slot { margin-bottom: 32px; }
+  .portfolio-project__header { flex-wrap: wrap; gap: 14px; }
+  .portfolio-project__open { margin-left: auto; padding: 11px 16px; }
+  .portfolio-project__title { min-width: 55%; }
+  .portfolio-project__collage { height: 370px; gap: 10px; }
+  .portfolio-project__details { gap: 10px; }
+}
+@media (max-width: 520px) {
+  .project-portfolio { padding-inline: 14px; }
+  .project-portfolio__heading h2 { font-size: 13vw; }
+  .project-portfolio__eyebrow { font-size: 7px; }
+  .portfolio-project { padding: 14px; }
+  .portfolio-project__collage { height: auto; grid-template-columns: 1fr; }
+  .portfolio-project__collage > .portfolio-art--cover { height: 280px; grid-row: 1; }
+  .portfolio-project__details { height: 145px; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; }
+  .portfolio-art__type { font-size: 70px; }
+  .portfolio-art figcaption { left: 8px; bottom: 8px; max-width: calc(100% - 16px); font-size: 7px; }
+  .project-portfolio__footer { flex-direction: column; gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) { .project-portfolio__slot { margin-bottom: 32px; } }

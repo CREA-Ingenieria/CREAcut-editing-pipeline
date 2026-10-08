@@ -1,0 +1,36 @@
+# Dependencias que los dos instaladores ponen desde PyPI en la maquina del
+# usuario: el asistente de Windows durante la instalacion (install-backend.ps1)
+# y la app de macOS en el primer arranque (src/main/macos-backend-setup.ts).
+# Es un subconjunto de ../../requirements.txt: solo lo que el backend del editor
+# Electron necesita en ejecucion.
+#
+# Deliberadamente fuera de esta lista:
+#   PySide6      El editor legado de creacut/ui/ no se distribuye con Electron.
+#   PyInstaller  Ningun instalador congela el backend.
+#   pytest       Solo para desarrollo.
+#
+# torch NO aparece aqui a proposito: los dos instaladores lo ponen antes en un
+# paso propio (en Windows desde el indice CPU de PyTorch, para no arrastrar
+# ~3,7 GB de bibliotecas CUDA). openai-whisper lo declara como dependencia y
+# encuentra esa version ya puesta.
+
+# Pipeline de video y render
+moviepy>=2.0
+imageio-ffmpeg>=0.5
+opencv-python>=4.8
+numpy>=1.24
+Pillow>=10.0
+pypdfium2>=4.30
+python-pptx>=1.0
+matplotlib>=3.7
+PyYAML>=6.0
+
+# Transcripcion automatica
+openai-whisper>=20231117
+
+# Exportacion PPTX -> PNG cuando PowerPoint esta instalado
+pywin32>=306; sys_platform == "win32"
+
+# Proveedores de extraccion de listas
+ollama>=0.4
+anthropic>=0.20

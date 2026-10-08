@@ -1,0 +1,177 @@
+.creator-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  padding: 36px 40px 72px;
+  background: radial-gradient(ellipse at 50% 46%, #27334138, transparent 57%), #0c0e12;
+  color: #e6edf4;
+}
+.creator-hero__content { width: min(1120px, 100%); margin: auto; }
+.creator-hero__masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 40px;
+  margin-bottom: 26px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  color: #8997a8;
+}
+.creator-hero__brand { display: inline-flex; align-items: center; color: #e6edf4; font-size: 20px; font-weight: 850; letter-spacing: -.06em; }
+.creator-hero__brand span { font-weight: 400; }
+.creator-hero__brand i { width: 6px; height: 6px; border-radius: 50%; margin: 0 0 9px 5px; background: #f5e600; }
+.creator-hero__heading {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  text-align: center;
+  font-size: clamp(64px, 11.8vw, 158px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.075em;
+  text-transform: uppercase;
+  color: #c4d0dd;
+  background: linear-gradient(180deg, #f0f5fc, #8492a4);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.creator-hero__bottom { display: flex; justify-content: space-between; align-items: end; gap: 32px; position: relative; z-index: 2; }
+.creator-hero__eyebrow { margin: 0 0 12px; color: #f5e600; font-size: 9px; font-weight: 650; letter-spacing: .16em; }
+.creator-hero__copy h2 { margin: 0; font-size: clamp(22px, 2.5vw, 32px); line-height: 1.12; font-weight: 550; letter-spacing: -.045em; }
+.creator-hero__copy > p:last-child { margin: 12px 0 0; color: #8997a8; font-size: 12px; line-height: 1.6; }
+.creator-hero__actions { display: flex; flex-direction: column; align-items: end; gap: 12px; }
+.creator-hero__actions button { color: #c5d0dc; }
+.creator-hero__actions .creator-hero__primary {
+  height: 58px;
+  min-width: 258px;
+  border-radius: 999px;
+  padding: 0 30px;
+  color: #141607;
+  background: linear-gradient(125deg, #f9f3a2, #f5e600 55%, #b0c31f);
+  border: 1px solid #ffffb8;
+  box-shadow: inset 0 -4px 10px #8798134d, 0 6px 30px #f5e60015;
+  font-size: 14px;
+}
+.creator-hero__status { display: flex; flex-direction: column; align-items: center; margin-top: 22px; }
+
+/* Separate transforms keep pointer tilt, idle float and the letter morph
+   independent. Pointer work runs only on this stage, not on the document. */
+.crea-sculpture {
+  --pointer-x: 0;
+  --pointer-y: 0;
+  position: relative;
+  isolation: isolate;
+  height: clamp(240px, 30vw, 360px);
+  margin: 0 0 20px;
+  perspective: 1100px;
+}
+.crea-sculpture__magnet {
+  position: absolute;
+  z-index: 3;
+  inset: 0 10%;
+  display: flex;
+  align-items: center;
+  transform: translate3d(calc(var(--pointer-x) * 26px), calc(var(--pointer-y) * 17px), 25px)
+    rotateX(calc(9deg - var(--pointer-y) * 8deg)) rotateY(calc(-9deg + var(--pointer-x) * 12deg)) rotateZ(-5deg);
+  transition: transform 650ms cubic-bezier(.2, .75, .25, 1);
+  will-change: transform;
+}
+.crea-sculpture[data-magnetic='true'] .crea-sculpture__magnet { transition-duration: 300ms; }
+.crea-sculpture__float { width: 100%; animation: creator-float 7s ease-in-out infinite; }
+.crea-sculpture__wordmark { width: 100%; height: auto; }
+.crea-sculpture .crea-morph__letter {
+  fill: var(--crea-metal-fill);
+  stroke: #d8e7f2;
+  stroke-width: .7;
+  paint-order: stroke fill;
+  filter: drop-shadow(1px 1px 0 #425368) drop-shadow(2px 2px 0 #29374b)
+    drop-shadow(3px 3px 0 #182338) drop-shadow(5px 7px 0 #080d19) drop-shadow(0 16px 18px #0007);
+}
+.crea-sculpture .crea-morph__shape {
+  filter: drop-shadow(1px 2px 0 #647089) drop-shadow(3px 4px 0 #202238) drop-shadow(5px 6px 0 #0a0c14);
+}
+.crea-sculpture .crea-morph__halo { opacity: .1; }
+.crea-sculpture__grid {
+  position: absolute;
+  inset: 15% 5% -8%;
+  background-image: linear-gradient(#8195b315 1px, transparent 1px), linear-gradient(90deg, #8195b315 1px, transparent 1px);
+  background-size: 46px 46px;
+  transform: rotateX(68deg);
+  mask-image: radial-gradient(ellipse, #0009, transparent 70%);
+  pointer-events: none;
+}
+.crea-sculpture__orbit {
+  position: absolute;
+  inset: 14% 5%;
+  border: 1px solid #8798b52b;
+  border-radius: 50%;
+  transform: rotate(-12deg) rotateX(57deg);
+  pointer-events: none;
+}
+.crea-sculpture__shadow { position: absolute; left: 20%; right: 18%; bottom: 15%; height: 20%; border-radius: 50%; background: #000a; filter: blur(24px); pointer-events: none; }
+.crea-sculpture__satellites { position: absolute; inset: 0; pointer-events: none; transform: translate(calc(var(--pointer-x) * -12px), calc(var(--pointer-y) * -8px)); transition: transform 650ms ease-out; }
+.crea-sculpture__shape { position: absolute; display: block; animation: creator-satellite 8s ease-in-out infinite; }
+.crea-sculpture__shape--circle {
+  width: 46px; height: 46px; left: 5%; top: 13%; border-radius: 50%;
+  background: radial-gradient(circle at 28% 23%, #ffbfdc, #fb0184 39%, #680537 80%);
+  box-shadow: inset -4px -5px 8px #0005, 5px 14px 18px #0005;
+}
+.crea-sculpture__shape--diamond {
+  width: 34px; height: 34px; right: 6%; top: 17%; rotate: 35deg; border-radius: 6px;
+  background: linear-gradient(130deg, #d6b6ff, #7643ad 44%, #410961 46%, #210731);
+  box-shadow: 4px 5px 0 #21082f, 8px 15px 20px #0005; animation-delay: -2s;
+}
+.crea-sculpture__shape--square {
+  width: 27px; height: 27px; left: 13%; bottom: 18%; rotate: -18deg; border-radius: 5px;
+  background: linear-gradient(130deg, #d5faff, #00a9ce 46%, #00647c);
+  box-shadow: 3px 4px 0 #00404e, 4px 12px 20px #0005; animation-delay: -5s;
+}
+.crea-sculpture__shape--triangle {
+  width: 46px; height: 46px; right: 14%; bottom: 13%; rotate: 16deg;
+  background: linear-gradient(130deg, #fffdc8, #f5e600 46%, #a89800);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%); animation-delay: -3s;
+}
+.crea-sculpture__coordinate { position: absolute; left: 0; bottom: 12px; color: #6d7b90; font-family: monospace; font-size: 9px; letter-spacing: .18em; }
+.crea-sculpture__hint { position: absolute; right: 0; bottom: 10px; margin: 0; color: #8997a8; font-size: 10px; }
+.crea-sculpture[data-running='false'] .crea-sculpture__float,
+.crea-sculpture[data-running='false'] .crea-sculpture__shape { animation-play-state: paused; }
+@keyframes creator-float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-11px) rotate(1deg); } }
+@keyframes creator-satellite { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-13px); } }
+
+:root[data-theme='light'] .creator-hero { background: radial-gradient(ellipse at 50% 43%, #fff, transparent 60%), #e9edf2; color: #17202b; }
+:root[data-theme='light'] .crea-sculpture .crea-morph__letter {
+  fill: var(--letter-color);
+  stroke: var(--letter-color);
+}
+:root[data-theme='light'] .creator-hero__heading { background-image: linear-gradient(180deg, #313c4d, #8c99ac); }
+:root[data-theme='light'] .creator-hero__brand { color: #17202b; }
+:root[data-theme='light'] .creator-hero__eyebrow { color: #8b1967; }
+:root[data-theme='light'] .creator-hero__masthead,
+:root[data-theme='light'] .creator-hero__copy > p:last-child,
+:root[data-theme='light'] .crea-sculpture__hint { color: #5f6c80; }
+:root[data-theme='light'] .creator-hero__actions button:not(.creator-hero__primary) { color: #344255; }
+:root[data-theme='light'] .crea-sculpture__shadow { background: #253c7040; }
+:root[data-theme='light'] .crea-sculpture__orbit { border-color: #56658133; }
+
+@media (max-width: 700px) {
+  .creator-hero { padding: 28px 22px 70px; }
+  .creator-hero__masthead { font-size: 7px; letter-spacing: .08em; gap: 20px; }
+  .creator-hero__heading { font-size: clamp(42px, 11.5vw, 82px); }
+  .creator-hero__bottom { flex-direction: column; align-items: center; text-align: center; gap: 24px; }
+  .creator-hero__actions { align-items: center; }
+  .crea-sculpture { height: clamp(180px, 43vw, 280px); margin-bottom: 28px; }
+  .crea-sculpture__magnet { inset-inline: 4%; }
+  .crea-sculpture__shape { scale: .65; }
+  .crea-sculpture__coordinate { display: none; }
+  .crea-sculpture__hint { width: 100%; text-align: center; bottom: 0; font-size: 9px; }
+}
+@media (hover: none) { .crea-sculpture__hint { visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) {
+  .crea-sculpture__float, .crea-sculpture__shape { animation: none !important; }
+  .crea-sculpture__magnet, .crea-sculpture__satellites { transform: none; transition: none !important; will-change: auto; }
+  .crea-sculpture__hint { visibility: hidden; }
+}

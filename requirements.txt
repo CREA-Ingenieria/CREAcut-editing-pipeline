@@ -1,0 +1,27 @@
+# CREAcut: Python 3.11 or newer is required.
+# El instalador final incluye FFmpeg. Para transcribir desde el código fuente,
+# el comando ffmpeg debe estar en PATH; FFprobe ya no es necesario.
+
+# Core video-rendering pipeline
+moviepy>=2.0
+imageio-ffmpeg>=0.5
+opencv-python>=4.8
+numpy>=1.24
+Pillow>=10.0
+pypdfium2>=4.30
+python-pptx>=1.0
+matplotlib>=3.7
+PyYAML>=6.0
+
+# Automatic transcription and desktop editor
+openai-whisper>=20231117
+PySide6>=6.7,<7
+# Direct PPTX -> PNG export when Microsoft PowerPoint is installed (Windows).
+pywin32>=306; sys_platform == "win32"
+
+# Optional list-extraction providers (the app falls back gracefully if unused)
+ollama>=0.4
+anthropic>=0.20
+
+# Solo para construir los instaladores autónomos; el usuario final no lo instala.
+PyInstaller>=6.0

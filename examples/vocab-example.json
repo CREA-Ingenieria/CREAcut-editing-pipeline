@@ -1,0 +1,15 @@
+[
+  {
+    "term": "momentum",
+    "definition": "The product of mass and velocity of an object."
+  },
+  {
+    "term": "friction",
+    "definition": "A force that opposes the relative motion of two surfaces in contact."
+  },
+  {
+    "term": "inertia",
+    "definition": "The tendency of an object to resist changes in its state of motion.",
+    "max_uses": 1
+  }
+]
