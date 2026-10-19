@@ -34,3 +34,7 @@ pywin32>=306; sys_platform == "win32"
 # Proveedores de extraccion de listas
 ollama>=0.4
 anthropic>=0.20
+
+# Raices de Mozilla para las descargas de setup_models.py. Ya llega con httpx
+# (ollama, anthropic); se declara porque ese script lo importa directamente.
+certifi>=2024.2.2

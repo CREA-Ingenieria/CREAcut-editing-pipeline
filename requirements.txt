@@ -22,6 +22,8 @@ pywin32>=306; sys_platform == "win32"
 # Optional list-extraction providers (the app falls back gracefully if unused)
 ollama>=0.4
 anthropic>=0.20
+# Mozilla roots for the installer's model downloads (setup_models.py).
+certifi>=2024.2.2
 
 # Solo para construir los instaladores autónomos; el usuario final no lo instala.
 PyInstaller>=6.0

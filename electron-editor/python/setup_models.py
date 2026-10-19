@@ -7,10 +7,12 @@ import hashlib
 import os
 from pathlib import Path
 import shutil
+import ssl
 import subprocess
 import sys
 import tempfile
 import time
+from urllib.error import URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
@@ -36,6 +38,24 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def tls_context() -> ssl.SSLContext:
+    """Trust the system certificate store plus certifi's Mozilla bundle.
+
+    Windows only keeps the root certificates it has needed so far and fetches
+    the rest when a program verifies through Windows itself. Python's OpenSSL
+    reads the store as it is, so on a machine that never needed, for example,
+    the root behind GitHub or ollama.com, the download failed with
+    CERTIFICATE_VERIFY_FAILED while the browser worked. certifi already comes
+    with httpx (ollama, anthropic); the system roots stay trusted, including
+    those a school or company network installs.
+    """
+    import certifi
+
+    context = ssl.create_default_context()
+    context.load_verify_locations(cafile=certifi.where())
+    return context
+
+
 def download(url: str, destination: Path, expected_sha256: str | None = None) -> None:
     """Stream to a temporary file; never load model weights into RAM or VRAM."""
     if expected_sha256 and destination.is_file():
@@ -49,7 +69,17 @@ def download(url: str, destination: Path, expected_sha256: str | None = None) ->
     try:
         report(f"Descargando {destination.name}...")
         request = Request(url, headers={"User-Agent": "CREAcut-Model-Setup/0.2"})
-        with urlopen(request, timeout=120) as source, partial.open("wb") as output:
+        try:
+            response = urlopen(request, timeout=120, context=tls_context())
+        except URLError as error:
+            if isinstance(error.reason, ssl.SSLCertVerificationError):
+                raise RuntimeError(
+                    f"No se pudo verificar el certificado al descargar {destination.name} "
+                    f"({error.reason.verify_message}). Revisa la fecha y hora del equipo, "
+                    "y si un antivirus o la red inspecciona HTTPS."
+                ) from error
+            raise
+        with response as source, partial.open("wb") as output:
             total = int(source.headers.get("Content-Length") or 0)
             completed = 0
             last_report = 0.0
